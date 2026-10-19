@@ -1,28 +1,51 @@
 # Finance onboarding in a day
 
-**From "connect your accounting system" to a trusted, consolidated P&L, with checks that prove it's right.**
+**Turns two companies' QuickBooks books into one trusted, combined monthly P&L (profit and loss statement), with automatic checks that prove every number matches the source.**
 
-A working slice of a finance data platform: QuickBooks → warehouse → chart of accounts mapping (rules + AI) → currency conversion → multi-entity consolidation with intercompany elimination → reconciliation tests → metrics layer → platform health report.
+**[Results dashboard](https://kushajjee-tech.github.io/TaskForDT/)** · [Product brief (PRD)](docs/PRD.md) · [Data contract](docs/data_contract_pnl.yml) · [How AI agents should use the data](docs/ai_ready_interface.md)
 
-Built to show how I'd approach the hardest part of FP&A onboarding: getting messy, multi-entity accounting data into a shape a CFO will trust in a board meeting.
+## The problem
 
-![Onboarding results report: verdict, data flow, health scorecard, consolidated P&L, consolidation bridge, COA mapping and AI eval](docs/images/onboarding_report.png)
+A new customer of an FP&A (financial planning) tool wants to see their numbers on day one. But accounting data is messy: every company names its accounts differently, uses its own currency and books payments between its own companies, so onboarding usually takes weeks of manual work.
 
-*`reports/onboarding_report.html`, generated from the warehouse at the end of every run (sample data shown). One self-contained page a founder can read in two minutes.*
+## What I built
+
+A working slice of that onboarding, run on a sample group of two companies (Acme Inc in the US, Acme Ltd in the UK) and tested against real QuickBooks sandbox companies.
+
+| Piece | What it does |
+|---|---|
+| **QuickBooks connector** | Pulls the chart of accounts and the monthly P&L through the QuickBooks API. After the first full load, it only fetches what changed, and re-checks recent months because accountants edit the past. |
+| **Warehouse + normalization** | Stores everything in a local DuckDB database (a single-file SQL database). Converts pounds to dollars at monthly average rates and removes payments between the two companies, so the group isn't double counted. |
+| **Account mapping with AI, and its eval** | Maps each company's accounts to one standard chart of accounts (COA), e.g. "SaaS Tools" and "Software Subscriptions" both become *Software & Tools*. Simple rules first, then an LLM for the rest. Unsure answers, and all revenue accounts, go to a human. Measured on 60 labelled accounts: 100% of auto-approved mappings correct, up from 95%. |
+| **dbt transformations** | dbt is a tool for building tables with version-controlled SQL. It turns raw data into the company P&Ls, the combined group P&L and one shared set of metric definitions (revenue, gross margin, net income...). |
+| **Tests** | 27 automatic checks on every run. The key ones: every account and every month ties back to QuickBooks' own report to the cent, and payments between the companies cancel out exactly. |
+| **Health report** | Sync success, data freshness, which checks pass, and which mappings wait for review, in a one-page [dashboard](https://kushajjee-tech.github.io/TaskForDT/). |
+
+## Run it (sample data, no credentials)
+
+Python 3.10 or newer recommended (3.9 works but prints an SSL warning on macOS).
+
+```bash
+python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
+cp .env.example .env
+./run_onboarding.sh --fresh
+```
+
+Then open `reports/onboarding_report.html` in a browser. The pipeline itself runs in under 10 seconds; installing packages takes longer.
+
+![Results dashboard: verdict, data flow, health scorecard, combined P&L, consolidation bridge, account mapping and AI eval](docs/images/onboarding_report.png)
 
 ---
 
-## The problem (in one example)
+# For engineers
 
-Acme has two companies: **Acme Inc (US, USD)** and **Acme Ltd (UK, GBP)**. The CFO wants one combined monthly P&L. Five things make that slow and error-prone:
+**See a check catch a real problem:**
+```bash
+make demo-edit   # simulates a back-dated edit OUTSIDE the lookback window → reconciliation fails
+make onboard     # normal sync again → passes
+```
 
-| Problem | What this project does |
-|---|---|
-| Getting data out reliably | Incremental QuickBooks extraction with checkpoints, retries and idempotent loads |
-| Every company names accounts differently ("Software Subscriptions" vs "SaaS Tools") | Chart of accounts mapping: rules first, LLM for the long tail, guardrails, human review queue |
-| Different currencies | Monthly average FX conversion to USD |
-| Money moving between the companies | Intercompany elimination on consolidation |
-| Proving the numbers are right | Reconciliation tests that tie every account and every month back to QuickBooks' own reports |
+Without an OpenAI key the mapper uses rules plus a weak fallback and sends the rest to review (the committed sample mapping means nothing needs mapping on a fresh clone). Add `OPENAI_API_KEY` to `.env` to use the LLM stage.
 
 ## Architecture
 
@@ -50,24 +73,6 @@ flowchart LR
 | Transform | `dbt/models/` | staging → intermediate (mapping, FX, intercompany) → marts (entity P&L, consolidated P&L, consolidation bridge, metrics). |
 | Test | `dbt/tests/` + schema tests | 27 checks, incl. reconciliation to source, intercompany nets to zero, every line mapped, AI mappings can't flip revenue/expense, FX rates present. |
 | Observe | `health/` | Sync success rate, freshness, test results, mappings awaiting review, time to first trusted P&L (`reports/platform_health.md`), plus the one-page HTML results report (`reports/onboarding_report.html`). |
-
-## Run it in 2 minutes (sample data, no credentials)
-
-```bash
-python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-cp .env.example .env            # SOURCE_MODE=sample
-./run_onboarding.sh --fresh     # extract → map → dbt build → health report → HTML report
-open reports/onboarding_report.html
-```
-
-Without an OpenAI key the mapper runs rules + a weak fallback, and sends the rest to review. Add `OPENAI_API_KEY` to `.env` to use the LLM stage.
-
-**See the reconciliation test catch a real problem:**
-```bash
-make demo-edit   # simulates a back-dated edit OUTSIDE the lookback window → reconciliation fails
-make onboard     # normal sync again → passes
-```
 
 ## Run it on real QuickBooks sandboxes
 
@@ -120,10 +125,10 @@ Human-approved mappings are never overwritten, so each revenue account is review
 
 1. **Self-reported confidence was useless.** All 60 mappings came back at 0.97-1.00, including the 3 wrong ones (two at 1.00). No threshold could have caught them.
 2. **One of the errors was ours, not the model's.** The insurance rule sent "Health Insurance - Employees" to Insurance. Rules now skip employee-benefit names and leave them to the LLM.
-3. **The other two (Design income, Workers Compensation) went away** once each account got its own call and the category names were written unambiguously in the prompt.
+3. **The other two (Design income, Workers Compensation) were correct after the switch** to one call per account with category names quoted exactly in the prompt. Both changes landed together, so we can't say which one fixed them.
 4. **Calibration needs errors to calibrate against.** With logprobs, every threshold from 0.5 to 0.97 gives 100% auto-approved accuracy on this gold set, so the eval can't say where errors start. We pick the most conservative threshold that costs no automation (0.97, which also keeps the 0.97-confidence rules). 52/52 correct is still only ~93% at the lower end of a 95% confidence interval, so the next step is a bigger gold set with deliberately ambiguous accounts.
 
-Full tables: `evals/results_llm_before.md`, `evals/results_llm_after.md`.
+Full tables: [before](evals/results_llm_before.md), [after](evals/results_llm_after.md), [offline baseline](evals/results_offline.md) (rules only: 30% auto-approved, 18/18 correct).
 
 ## Key design decisions
 
@@ -145,5 +150,5 @@ ai/        COA mapper (rules → LLM → guardrails) and eval
 evals/     gold set + eval results
 dbt/       models (staging, intermediate, marts), seeds, tests
 health/    platform health report + one-page HTML results report
-docs/      PRD, data contract, acceptance criteria, AI-ready interface
+docs/      PRD (incl. acceptance criteria), data contract, AI-ready interface, dashboard (index.html)
 ```
