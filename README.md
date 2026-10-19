@@ -31,7 +31,7 @@ cp .env.example .env
 ./run_onboarding.sh --fresh
 ```
 
-Then open `reports/onboarding_report.html` in a browser. The pipeline itself runs in under 10 seconds; installing packages takes longer.
+Then open `reports/onboarding_report.html` in a browser. The pipeline itself runs in about 10 seconds; installing packages takes longer.
 
 ![Results dashboard: verdict, data flow, health scorecard, combined P&L, consolidation bridge, account mapping and AI eval](docs/images/onboarding_report.png)
 
