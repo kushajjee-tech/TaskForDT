@@ -1,0 +1,7 @@
+finance_onboarding:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: "{{ env_var('DBT_DUCKDB_PATH', '../warehouse/finance.duckdb') }}"
+      threads: 4

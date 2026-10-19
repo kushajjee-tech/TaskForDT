@@ -1,0 +1,32 @@
+entity_id,account_id,account_name,standard_category,confidence,method,status,reason
+uk,101,Turnover,Product Revenue,1.0,llm,needs_review,policy: revenue mappings always get human review; llm: p(category)=1.00 from token logprobs
+uk,102,Consultancy Income,Services Revenue,1.0,llm,needs_review,policy: revenue mappings always get human review; llm: p(category)=1.00 from token logprobs
+uk,103,Cost of Sales,Cost of Revenue,0.97,rule,approved,rule: '\b(cost of goods sold|cost of sales|cogs)\b' on Cost of Goods Sold account
+uk,110,Staff Salaries,Payroll & Benefits,0.97,rule,approved,rule: '\b(salar|wages|payroll)' on Expense account
+uk,111,Employer's NI,Payroll & Benefits,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+uk,112,Marketing,Marketing & Advertising,0.97,rule,approved,rule: '\b(advertis|marketing)' on Expense account
+uk,113,SaaS Tools,Software & Tools,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+uk,114,Office Rent,Rent & Facilities,0.97,rule,approved,rule: '\b(rent|lease)\b' on Expense account
+uk,115,Travel & Subsistence,Travel & Meals,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+uk,116,Accountancy Fees,Professional Fees,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+uk,117,Stationery,Office & Admin,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+uk,118,Business Insurance,Insurance,0.97,rule,approved,rule: '\binsurance\b' on Expense account
+uk,119,Card Processing Fees,Bank & Payment Fees,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+uk,120,Depreciation,Depreciation & Amortization,0.97,rule,approved,rule: '\b(depreciation|amortization|amortisation)\b' on Other Expense account
+uk,121,Bank Interest Received,Other Income,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+us,12,Legal & Professional Fees,Professional Fees,0.97,rule,approved,rule: '\b(legal|professional fees)\b' on Expense account
+us,15,Office Expenses,Office & Admin,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+us,41,Travel,Travel & Meals,1.0,llm,approved,llm: p(category)=1.00 from token logprobs
+us,57,Rent or Lease,Rent & Facilities,0.97,rule,approved,rule: '\b(rent|lease)\b' on Expense account
+us,58,Software Subscriptions,Software & Tools,0.97,rule,approved,rule: '\b(software|subscriptions?)\b' on Expense account
+us,62,Insurance,Insurance,0.97,rule,approved,rule: '\binsurance\b' on Expense account
+us,63,Depreciation,Depreciation & Amortization,0.97,rule,approved,rule: '\b(depreciation|amortization|amortisation)\b' on Other Expense account
+us,7,Advertising,Marketing & Advertising,0.97,rule,approved,rule: '\b(advertis|marketing)' on Expense account
+us,79,Sales of Product Income,Product Revenue,1.0,llm,needs_review,policy: revenue mappings always get human review; llm: p(category)=1.00 from token logprobs
+us,8,Bank Charges,Bank & Payment Fees,0.97,rule,approved,rule: '\bbank charges\b' on Expense account
+us,80,Services,Services Revenue,1.0,llm,needs_review,policy: revenue mappings always get human review; llm: p(category)=1.00 from token logprobs
+us,81,Cost of Goods Sold,Cost of Revenue,0.97,rule,approved,rule: '\b(cost of goods sold|cost of sales|cogs)\b' on Cost of Goods Sold account
+us,82,Interest Earned,Other Income,0.97,rule,approved,rule: '\binterest (earned|income)\b' on Other Income account
+us,90,Payroll Expenses,Payroll & Benefits,0.97,rule,approved,rule: '\b(salar|wages|payroll)' on Expense account
+us,91,Salaries & Wages,Payroll & Benefits,0.97,rule,approved,rule: '\b(salar|wages|payroll)' on Expense account
+us,92,Payroll Taxes,Payroll & Benefits,0.97,rule,approved,rule: '\b(salar|wages|payroll)' on Expense account

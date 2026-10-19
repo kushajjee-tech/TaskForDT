@@ -1,0 +1,3 @@
+entity_id,entity_name,country,functional_currency
+us,Acme Inc,United States,USD
+uk,Acme Ltd,United Kingdom,GBP

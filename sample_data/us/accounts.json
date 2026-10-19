@@ -1,0 +1,251 @@
+[
+  {
+    "Id": "79",
+    "Name": "Sales of Product Income",
+    "AccountType": "Income",
+    "AccountSubType": "SalesOfProductIncome",
+    "Classification": "Revenue",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Sales of Product Income",
+    "MetaData": {
+      "LastUpdatedTime": "2025-03-12T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "80",
+    "Name": "Services",
+    "AccountType": "Income",
+    "AccountSubType": "ServiceFeeIncome",
+    "Classification": "Revenue",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Services",
+    "MetaData": {
+      "LastUpdatedTime": "2025-04-12T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "81",
+    "Name": "Cost of Goods Sold",
+    "AccountType": "Cost of Goods Sold",
+    "AccountSubType": "SuppliesMaterialsCogs",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Cost of Goods Sold",
+    "MetaData": {
+      "LastUpdatedTime": "2025-04-15T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "90",
+    "Name": "Payroll Expenses",
+    "AccountType": "Expense",
+    "AccountSubType": "PayrollExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Payroll Expenses",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-14T09:00:00-07:00"
+    },
+    "_is_parent": true
+  },
+  {
+    "Id": "91",
+    "Name": "Salaries & Wages",
+    "AccountType": "Expense",
+    "AccountSubType": "PayrollExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Payroll Expenses:Salaries & Wages",
+    "MetaData": {
+      "LastUpdatedTime": "2025-06-19T09:00:00-07:00"
+    },
+    "ParentRef": {
+      "value": "90"
+    },
+    "SubAccount": true
+  },
+  {
+    "Id": "92",
+    "Name": "Payroll Taxes",
+    "AccountType": "Expense",
+    "AccountSubType": "PayrollExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Payroll Expenses:Payroll Taxes",
+    "MetaData": {
+      "LastUpdatedTime": "2025-04-15T09:00:00-07:00"
+    },
+    "ParentRef": {
+      "value": "90"
+    },
+    "SubAccount": true
+  },
+  {
+    "Id": "7",
+    "Name": "Advertising",
+    "AccountType": "Expense",
+    "AccountSubType": "AdvertisingPromotional",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Advertising",
+    "MetaData": {
+      "LastUpdatedTime": "2025-06-18T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "58",
+    "Name": "Software Subscriptions",
+    "AccountType": "Expense",
+    "AccountSubType": "OfficeGeneralAdministrativeExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Software Subscriptions",
+    "MetaData": {
+      "LastUpdatedTime": "2025-04-17T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "57",
+    "Name": "Rent or Lease",
+    "AccountType": "Expense",
+    "AccountSubType": "RentOrLeaseOfBuildings",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Rent or Lease",
+    "MetaData": {
+      "LastUpdatedTime": "2025-05-18T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "41",
+    "Name": "Travel",
+    "AccountType": "Expense",
+    "AccountSubType": "Travel",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Travel",
+    "MetaData": {
+      "LastUpdatedTime": "2025-02-11T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "12",
+    "Name": "Legal & Professional Fees",
+    "AccountType": "Expense",
+    "AccountSubType": "LegalProfessionalFees",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Legal & Professional Fees",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-12T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "15",
+    "Name": "Office Expenses",
+    "AccountType": "Expense",
+    "AccountSubType": "OfficeGeneralAdministrativeExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Office Expenses",
+    "MetaData": {
+      "LastUpdatedTime": "2025-03-18T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "62",
+    "Name": "Insurance",
+    "AccountType": "Expense",
+    "AccountSubType": "Insurance",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Insurance",
+    "MetaData": {
+      "LastUpdatedTime": "2025-06-11T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "8",
+    "Name": "Bank Charges",
+    "AccountType": "Expense",
+    "AccountSubType": "BankCharges",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Bank Charges",
+    "MetaData": {
+      "LastUpdatedTime": "2025-02-18T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "63",
+    "Name": "Depreciation",
+    "AccountType": "Other Expense",
+    "AccountSubType": "Depreciation",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Depreciation",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-16T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "82",
+    "Name": "Interest Earned",
+    "AccountType": "Other Income",
+    "AccountSubType": "InterestEarned",
+    "Classification": "Revenue",
+    "CurrencyRef": {
+      "value": "USD"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Interest Earned",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-14T09:00:00-07:00"
+    }
+  }
+]

@@ -1,0 +1,39 @@
+# Data contract: monthly P&L by account (raw.qbo_pnl_monthly -> stg_qbo__pnl_monthly)
+# Agreement between the connector (producer) and transformation/metrics/AI (consumers).
+contract: pnl_monthly_by_account
+version: 1.0
+owner: data-platform
+producer: extract/extract.py (QuickBooks ProfitAndLoss report, summarize_column_by=Month)
+consumers: [int_gl_lines, metrics layer, AI agents]
+
+grain: one row per entity_id, account_id, period with a non-zero amount
+primary_key: [entity_id, account_id, period]
+
+schema:
+  entity_id:      {type: varchar, required: true, description: "Legal entity, references entities.entity_id"}
+  account_id:     {type: varchar, required: true, description: "Source account id (string, never cast to int)"}
+  account_name:   {type: varchar, required: true}
+  report_section: {type: varchar, allowed: [Income, COGS, Expenses, OtherIncome, OtherExpenses]}
+  period:         {type: date, required: true, description: "First day of the month"}
+  amount:         {type: double, required: true, description: "Local currency, as reported (positive for revenue and expense)"}
+  _loaded_at:     {type: timestamp, required: true}
+
+semantics:
+  currency: entity functional currency (entities.functional_currency)
+  accounting_method: accrual
+  sign: as reported by QuickBooks; net income direction comes from account classification
+
+freshness:
+  warn_after: 24h
+  error_after: 72h
+
+change_handling:
+  - Back-dated edits within LOOKBACK_MONTHS are replaced on the next sync.
+  - Edits outside the window are detected by reconciliation against period totals.
+
+quality_guarantees:
+  - Sum by account over the synced range equals the QuickBooks report total (±0.01)
+  - Net income per entity-month equals QuickBooks Net Income (±0.01)
+  - No duplicate primary keys after any number of re-runs
+
+breaking_changes: require a new contract version and 2 weeks' notice to consumers

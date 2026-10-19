@@ -1,0 +1,227 @@
+[
+  {
+    "Id": "101",
+    "Name": "Turnover",
+    "AccountType": "Income",
+    "AccountSubType": "SalesOfProductIncome",
+    "Classification": "Revenue",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Turnover",
+    "MetaData": {
+      "LastUpdatedTime": "2025-02-11T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "102",
+    "Name": "Consultancy Income",
+    "AccountType": "Income",
+    "AccountSubType": "ServiceFeeIncome",
+    "Classification": "Revenue",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Consultancy Income",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-10T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "103",
+    "Name": "Cost of Sales",
+    "AccountType": "Cost of Goods Sold",
+    "AccountSubType": "SuppliesMaterialsCogs",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Cost of Sales",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-11T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "110",
+    "Name": "Staff Salaries",
+    "AccountType": "Expense",
+    "AccountSubType": "PayrollExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Staff Salaries",
+    "MetaData": {
+      "LastUpdatedTime": "2025-03-16T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "111",
+    "Name": "Employer's NI",
+    "AccountType": "Expense",
+    "AccountSubType": "PayrollExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Employer's NI",
+    "MetaData": {
+      "LastUpdatedTime": "2025-03-19T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "112",
+    "Name": "Marketing",
+    "AccountType": "Expense",
+    "AccountSubType": "AdvertisingPromotional",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Marketing",
+    "MetaData": {
+      "LastUpdatedTime": "2025-04-18T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "113",
+    "Name": "SaaS Tools",
+    "AccountType": "Expense",
+    "AccountSubType": "OfficeGeneralAdministrativeExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "SaaS Tools",
+    "MetaData": {
+      "LastUpdatedTime": "2025-06-14T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "114",
+    "Name": "Office Rent",
+    "AccountType": "Expense",
+    "AccountSubType": "RentOrLeaseOfBuildings",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Office Rent",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-17T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "115",
+    "Name": "Travel & Subsistence",
+    "AccountType": "Expense",
+    "AccountSubType": "Travel",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Travel & Subsistence",
+    "MetaData": {
+      "LastUpdatedTime": "2025-01-17T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "116",
+    "Name": "Accountancy Fees",
+    "AccountType": "Expense",
+    "AccountSubType": "LegalProfessionalFees",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Accountancy Fees",
+    "MetaData": {
+      "LastUpdatedTime": "2025-03-11T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "117",
+    "Name": "Stationery",
+    "AccountType": "Expense",
+    "AccountSubType": "OfficeGeneralAdministrativeExpenses",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Stationery",
+    "MetaData": {
+      "LastUpdatedTime": "2025-04-10T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "118",
+    "Name": "Business Insurance",
+    "AccountType": "Expense",
+    "AccountSubType": "Insurance",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Business Insurance",
+    "MetaData": {
+      "LastUpdatedTime": "2025-05-13T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "119",
+    "Name": "Card Processing Fees",
+    "AccountType": "Expense",
+    "AccountSubType": "BankCharges",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Card Processing Fees",
+    "MetaData": {
+      "LastUpdatedTime": "2025-02-16T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "120",
+    "Name": "Depreciation",
+    "AccountType": "Other Expense",
+    "AccountSubType": "Depreciation",
+    "Classification": "Expense",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Depreciation",
+    "MetaData": {
+      "LastUpdatedTime": "2025-06-17T09:00:00-07:00"
+    }
+  },
+  {
+    "Id": "121",
+    "Name": "Bank Interest Received",
+    "AccountType": "Other Income",
+    "AccountSubType": "InterestEarned",
+    "Classification": "Revenue",
+    "CurrencyRef": {
+      "value": "GBP"
+    },
+    "Active": true,
+    "FullyQualifiedName": "Bank Interest Received",
+    "MetaData": {
+      "LastUpdatedTime": "2025-03-13T09:00:00-07:00"
+    }
+  }
+]

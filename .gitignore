@@ -1,0 +1,15 @@
+.env
+.venv/
+state/
+warehouse/
+reports/
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+__pycache__/
+*.pyc
+dbt/.user.yml
+.env.*
+!.env.example
+*.duckdb
+.DS_Store

@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: fct_pnl_entity_monthly
+    description: P&L per entity, month and standard category (local currency and USD), including intercompany.
+    columns:
+      - name: pnl_key
+        data_tests: [unique, not_null]
+      - name: entity_id
+        data_tests:
+          - relationships: {arguments: {to: ref('entities'), field: entity_id}}
+      - name: standard_category
+        data_tests:
+          - not_null
+          - relationships: {arguments: {to: ref('standard_coa'), field: standard_category}}
+      - name: pnl_group
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Revenue', 'COGS', 'OpEx', 'Other', 'Tax']
+      - name: amount_usd
+        data_tests: [not_null]
+
+  - name: fct_pnl_consolidated_monthly
+    description: Group P&L in USD with intercompany eliminated.
+    columns:
+      - name: pnl_key
+        data_tests: [unique, not_null]
+
+  - name: fct_consolidation_bridge
+    description: Entity totals minus intercompany eliminations equals consolidated totals, per month.
+    columns:
+      - name: period
+        data_tests: [unique, not_null]
+
+  - name: mtr_monthly_metrics
+    description: >
+      Metrics layer (consolidated, USD). Definitions:
+      revenue = Product + Services Revenue (excl. intercompany);
+      cost_of_revenue = COGS; gross_profit = revenue - cost_of_revenue;
+      gross_margin_pct = gross_profit / revenue;
+      operating_expenses = all OpEx categories (excl. intercompany);
+      operating_income = revenue - cost_of_revenue - operating_expenses;
+      net_income = all P&L lines incl. other income/expense and tax;
+      net_burn = monthly net loss (P&L proxy, 0 when profitable).
+    columns:
+      - name: period
+        data_tests: [unique, not_null]

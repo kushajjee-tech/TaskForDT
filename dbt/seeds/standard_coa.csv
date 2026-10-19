@@ -1,0 +1,20 @@
+standard_category,pnl_group,category_sign,is_intercompany,description
+Product Revenue,Revenue,1,false,Revenue from selling products or subscriptions
+Services Revenue,Revenue,1,false,Revenue from services consulting or implementation
+Cost of Revenue,COGS,-1,false,Direct costs of delivering products or services
+Payroll & Benefits,OpEx,-1,false,Salaries wages bonuses payroll taxes employer social security and benefits
+Software & Tools,OpEx,-1,false,Software subscriptions SaaS tools hosting and IT services
+Marketing & Advertising,OpEx,-1,false,Advertising marketing promotions events and sponsorships
+Rent & Facilities,OpEx,-1,false,Office rent leases utilities repairs and building maintenance
+Travel & Meals,OpEx,-1,false,Travel lodging subsistence meals and entertainment
+Professional Fees,OpEx,-1,false,Legal accounting audit bookkeeping and consulting fees paid to advisers
+Office & Admin,OpEx,-1,false,Office supplies stationery postage dues licenses and other general admin
+Insurance,OpEx,-1,false,Business liability property and workers compensation insurance
+Bank & Payment Fees,OpEx,-1,false,Bank charges card processing and payment fees
+Vehicle & Equipment,OpEx,-1,false,Vehicles fuel equipment rental and equipment repairs
+Depreciation & Amortization,OpEx,-1,false,Depreciation and amortization of assets
+Other Income,Other,1,false,Interest income and other non-operating income
+Other Expense,Other,-1,false,Interest expense FX losses and other non-operating expense
+Income Tax,Tax,-1,false,Corporate income taxes
+Intercompany Revenue,Revenue,1,true,Revenue charged to another entity in the group (eliminated on consolidation)
+Intercompany Expense,OpEx,-1,true,Expense charged by another entity in the group (eliminated on consolidation)
