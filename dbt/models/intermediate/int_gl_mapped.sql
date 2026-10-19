@@ -10,5 +10,5 @@ select
     case when l.is_intercompany then 'approved' else m.status end as mapping_status,
     case when l.is_intercompany then 1.0 else m.confidence end    as mapping_confidence
 from {{ ref('int_gl_lines') }} l
-left join {{ ref('coa_mapping') }} m
+left join {{ ref('stg_coa_mapping') }} m
     on m.entity_id = l.entity_id and m.account_id = l.account_id

@@ -141,7 +141,14 @@ def main():
     run_id = uuid.uuid4().hex[:12]
 
     print(f"Sync run {run_id} | mode={args.mode} | as of {today}")
-    con, state, ok = load.connect(), load_state(), True
+    state = load_state()
+    # The warehouse and sync cursors hold one source's data at a time. Mixing sample and live
+    # rows would collide on account ids (and reuse the other source's cursor), so refuse.
+    if state.get("mode", args.mode) != args.mode:
+        sys.exit(f"Warehouse holds {state['mode']} data; switching to {args.mode} needs a clean start: "
+                 "./run_onboarding.sh --fresh")
+    state["mode"] = args.mode
+    con, ok = load.connect(), True
     for entity, client in build_clients(args.mode, args.simulate_edit).items():
         st = state.setdefault(entity, {})
         ok &= sync_accounts(con, client, entity, st, run_id, args.mode)

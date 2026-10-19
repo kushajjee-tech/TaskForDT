@@ -30,5 +30,8 @@ seeds:
       +column_types: {standard_category: varchar, pnl_group: varchar, category_sign: integer, is_intercompany: boolean, description: varchar}
     intercompany_transactions:
       +column_types: {ic_id: varchar, period: date, provider_entity: varchar, recipient_entity: varchar, fee_usd: double, description: varchar}
-    coa_mapping:
+    # One mapping seed per source mode (see models/staging/stg_coa_mapping.sql)
+    coa_mapping_sample:
+      +column_types: {entity_id: varchar, account_id: varchar, account_name: varchar, standard_category: varchar, confidence: double, method: varchar, status: varchar, reason: varchar}
+    coa_mapping_live:
       +column_types: {entity_id: varchar, account_id: varchar, account_name: varchar, standard_category: varchar, confidence: double, method: varchar, status: varchar, reason: varchar}

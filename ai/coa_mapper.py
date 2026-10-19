@@ -15,6 +15,7 @@ Pipeline:  rules (stage 1)  ->  LLM for the rest (stage 2)  ->  guardrails  ->  
 Usage:
     python -m ai.coa_mapper              # map new accounts in the warehouse
     python -m ai.coa_mapper --offline    # rules + fallback only (no API key needed)
+    python -m ai.coa_mapper --mode live  # mode defaults to SOURCE_MODE; picks the mapping file
 """
 from __future__ import annotations
 
@@ -33,7 +34,10 @@ from dotenv import load_dotenv
 from ai.rules import apply_rules, fallback
 from ai.taxonomy import load_taxonomy
 
-MAPPING_SEED = Path("dbt/seeds/coa_mapping.csv")
+# One mapping file per source mode: account ids are only unique within one QuickBooks company,
+# so sample and live mappings must never share a file. Only the sample file is committed.
+MAPPING_SEEDS = {"sample": Path("dbt/seeds/coa_mapping_sample.csv"),
+                 "live": Path("dbt/seeds/coa_mapping_live.csv")}
 FIELDS = ["entity_id", "account_id", "account_name", "standard_category",
           "confidence", "method", "status", "reason"]
 SIGN_BY_CLASSIFICATION = {"Revenue": 1, "Expense": -1}
@@ -161,7 +165,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="rules + fallback only, no LLM")
     ap.add_argument("--remap-all", action="store_true", help="ignore existing non-human mappings")
+    ap.add_argument("--mode", default=os.environ.get("SOURCE_MODE", "sample"), choices=list(MAPPING_SEEDS))
     args = ap.parse_args()
+    seed = MAPPING_SEEDS[args.mode]
     offline = args.offline or not os.environ.get("OPENAI_API_KEY")
     model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
     threshold = float(os.environ.get("AUTO_APPROVE_CONFIDENCE", "0.97"))
@@ -182,7 +188,7 @@ def main():
     # Keep a mapping only if it is human-approved, or the same account (id and name) is still
     # in the warehouse. Otherwise it is stale: the account was renamed, deleted, or the ids
     # belong to a different company (e.g. switching from sample data to a live sandbox).
-    existing = list(csv.DictReader(MAPPING_SEED.open())) if MAPPING_SEED.exists() else []
+    existing = list(csv.DictReader(seed.open())) if seed.exists() else []
     if args.remap_all:
         existing = [r for r in existing if r["method"] == "human"]
     stale = [r for r in existing if r["method"] != "human"
@@ -196,7 +202,7 @@ def main():
             "fully_qualified_name": r[3], "account_type": r[4], "account_sub_type": r[5],
             "classification": r[6], "country": r[7]}
            for r in rows if (r[0], r[1]) not in known]
-    print(f"COA mapping: {len(known)} already mapped, {len(new)} new accounts "
+    print(f"COA mapping ({seed}): {len(known)} already mapped, {len(new)} new accounts "
           f"({'offline: rules + fallback' if offline else 'rules + ' + model})")
 
     mapped = map_accounts(new, offline, model, threshold) if new else []
@@ -205,7 +211,7 @@ def main():
         "standard_category": m["category"], "confidence": round(m["confidence"], 2),
         "method": m["method"], "status": m["status"], "reason": m["reason"].replace("\n", " ")[:200]}
         for m in mapped]
-    with MAPPING_SEED.open("w", newline="") as f:
+    with seed.open("w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=FIELDS)
         w.writeheader()
         w.writerows(sorted(all_rows, key=lambda r: (r["entity_id"], r["account_id"])))

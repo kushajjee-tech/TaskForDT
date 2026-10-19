@@ -13,3 +13,4 @@ dbt/.user.yml
 !.env.example
 *.duckdb
 .DS_Store
+dbt/seeds/coa_mapping_live.csv
