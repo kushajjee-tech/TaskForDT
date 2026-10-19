@@ -1,29 +1,47 @@
-# Finance onboarding in a day
+# End-to-End Finance Data Platform
 
-**Turns two companies' QuickBooks books into one trusted, combined monthly P&L (profit and loss statement), with automatic checks that prove every number matches the source.**
+**Links:** [Results dashboard](https://kushajjee-tech.github.io/TaskForDT/) · [Run it](#run-it)
 
-**[Results dashboard](https://kushajjee-tech.github.io/TaskForDT/)** · [Product brief (PRD)](docs/PRD.md) · [Data contract](docs/data_contract_pnl.yml) · [How AI agents should use the data](docs/ai_ready_interface.md)
+[![Results dashboard: verdict, data flow, health scorecard, combined P&L, consolidation bridge, account mapping and AI eval](docs/images/onboarding_report.png)](https://kushajjee-tech.github.io/TaskForDT/)
 
 ## The problem
-
-A new customer of an FP&A (financial planning) tool wants to see their numbers on day one. But accounting data is messy: every company names its accounts differently, uses its own currency and books payments between its own companies, so onboarding usually takes weeks of manual work.
+Drivetrain helps CFOs plan budgets and forecasts, and every forecast is only as good as the accounting data underneath it. That data comes from different systems, companies and currencies, each with its own account names. The problem I chose to solve: bringing it in so the numbers are correct, consistent across companies, and match the books, so a CFO can trust them in a board meeting.
 
 ## What I built
+A working data pipeline, built end to end in about four hours, using two QuickBooks test companies (one in the US in dollars, one in the UK in pounds):
 
-A working slice of that onboarding, run on a sample group of two companies (Acme Inc in the US, Acme Ltd in the UK) and tested against real QuickBooks sandbox companies.
+1. **Connected to the source.** Built a QuickBooks API connector with OAuth and automatic token refresh.
+   - The first run pulls full history; later runs pull only what changed, with checkpoints and retries.
+   - Re-running never creates duplicates.
+2. **Loaded and normalized the data.** Landed both companies' raw data in a DuckDB warehouse and normalized their two different account structures into one common schema.
+3. **Mapped the chart of accounts (COA).** Translated each company's account names into one standard list.
+   - Rules first, AI (LLM) for the rest, and a human check when unsure.
+   - Tested the AI on 60 labelled accounts: every auto-approved mapping was correct.
+4. **Transformed with dbt.** Converted pounds to dollars, combined both companies, and removed the charges between them (intercompany elimination).
+5. **Tested every run.** 27 automatic checks, including that every number matches QuickBooks to the cent.
+6. **Monitored health.** A report showing sync success, data freshness, check results and what needs human review.
 
-| Piece | What it does |
-|---|---|
-| **QuickBooks connector** | Pulls the chart of accounts and the monthly P&L through the QuickBooks API. After the first full load, it only fetches what changed, and re-checks recent months because accountants edit the past. |
-| **Warehouse + normalization** | Stores everything in a local DuckDB database (a single-file SQL database). Converts pounds to dollars at monthly average rates and removes payments between the two companies, so the group isn't double counted. |
-| **Account mapping with AI, and its eval** | Maps each company's accounts to one standard chart of accounts (COA), e.g. "SaaS Tools" and "Software Subscriptions" both become *Software & Tools*. Simple rules first, then an LLM for the rest. Unsure answers, and all revenue accounts, go to a human. Measured on 60 labelled accounts: 100% of auto-approved mappings correct, up from 95%. |
-| **dbt transformations** | dbt is a tool for building tables with version-controlled SQL. It turns raw data into the company P&Ls, the combined group P&L and one shared set of metric definitions (revenue, gross margin, net income...). |
-| **Tests** | 27 automatic checks on every run. The key ones: every account and every month ties back to QuickBooks' own report to the cent, and payments between the companies cancel out exactly. |
-| **Health report** | Sync success, data freshness, which checks pass, and which mappings wait for review, in a one-page [dashboard](https://kushajjee-tech.github.io/TaskForDT/). |
+The result is one combined P&L a CFO can trust, produced with one command.
 
-## Run it (sample data, no credentials)
+## How this maps to the role
+| What the role asks for | What I did |
+| --- | --- |
+| Integrations and connectors | QuickBooks API connector with incremental sync |
+| Data modelling and transformation | Common schema, dbt models on DuckDB |
+| COA mapping, multi-entity, currency, reconciliation | All four, end to end |
+| Data quality and observability | 27 automatic checks and a health report |
+| AI on structured data | AI COA mapping with an eval and human review |
+| Faster onboarding | Connect to trusted P&L with one command |
 
-Python 3.10 or newer recommended (3.9 works but prints an SSL warning on macOS).
+## Checks it passes
+- ✓ Numbers match QuickBooks to the cent
+- ✓ Charges between the two companies cancel out
+- ✓ Every account is mapped
+- ✓ Unsure AI mappings go to a person
+
+## Run it
+
+Sample data, no credentials needed. Python 3.10+ recommended (3.9 works but prints an SSL warning on macOS).
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt
@@ -31,13 +49,7 @@ cp .env.example .env
 ./run_onboarding.sh --fresh
 ```
 
-Then open `reports/onboarding_report.html` in a browser. The pipeline itself runs in about 10 seconds; installing packages takes longer.
-
-![Results dashboard: verdict, data flow, health scorecard, combined P&L, consolidation bridge, account mapping and AI eval](docs/images/onboarding_report.png)
-
----
-
-# For engineers
+Then open `reports/onboarding_report.html` in a browser. The pipeline runs in about 10 seconds.
 
 **See a check catch a real problem:**
 ```bash
@@ -46,6 +58,12 @@ make onboard     # normal sync again → passes
 ```
 
 Without an OpenAI key the mapper uses rules plus a weak fallback and sends the rest to review (the committed sample mapping means nothing needs mapping on a fresh clone). Add `OPENAI_API_KEY` to `.env` to use the LLM stage.
+
+---
+
+# Technical details
+
+More docs: [product brief (PRD)](docs/PRD.md) · [data contract](docs/data_contract_pnl.yml) · [how AI agents should use the data](docs/ai_ready_interface.md)
 
 ## Architecture
 
