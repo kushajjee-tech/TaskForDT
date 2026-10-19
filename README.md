@@ -6,6 +6,10 @@ A working slice of a finance data platform: QuickBooks → warehouse → chart o
 
 Built to show how I'd approach the hardest part of FP&A onboarding: getting messy, multi-entity accounting data into a shape a CFO will trust in a board meeting.
 
+![Onboarding results report: verdict, data flow, health scorecard, consolidated P&L, consolidation bridge, COA mapping and AI eval](docs/images/onboarding_report.png)
+
+*`reports/onboarding_report.html`, generated from the warehouse at the end of every run (sample data shown). One self-contained page a founder can read in two minutes.*
+
 ---
 
 ## The problem (in one example)
@@ -28,7 +32,7 @@ flowchart LR
     QBUK[QuickBooks<br/>Acme Ltd · GBP] --> EX
     EX[Extractor<br/>incremental + checkpoints] --> RAW[(raw<br/>DuckDB)]
     RAW --> MAP[COA mapper<br/>rules → LLM → guardrails]
-    MAP --> SEED[coa_mapping<br/>+ review queue]
+    MAP --> SEED[coa_mapping_sample / _live<br/>+ review queue]
     RAW --> STG[staging]
     SEED --> INT
     STG --> INT[intermediate<br/>mapping · FX · intercompany]
@@ -45,7 +49,7 @@ flowchart LR
 | Map | `ai/` | Stage 1 rules, stage 2 LLM (JSON, temperature 0, confidence from logprobs), guardrails, risk-based review (revenue always reviewed), auto-approve above a calibrated threshold. Only new accounts are mapped. |
 | Transform | `dbt/models/` | staging → intermediate (mapping, FX, intercompany) → marts (entity P&L, consolidated P&L, consolidation bridge, metrics). |
 | Test | `dbt/tests/` + schema tests | 27 checks, incl. reconciliation to source, intercompany nets to zero, every line mapped, AI mappings can't flip revenue/expense, FX rates present. |
-| Observe | `health/` | Sync success rate, freshness, test results, mappings awaiting review, time to first trusted P&L. |
+| Observe | `health/` | Sync success rate, freshness, test results, mappings awaiting review, time to first trusted P&L (`reports/platform_health.md`), plus the one-page HTML results report (`reports/onboarding_report.html`). |
 
 ## Run it in 2 minutes (sample data, no credentials)
 
@@ -53,7 +57,8 @@ flowchart LR
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env            # SOURCE_MODE=sample
-./run_onboarding.sh --fresh     # extract → map → dbt build → health report
+./run_onboarding.sh --fresh     # extract → map → dbt build → health report → HTML report
+open reports/onboarding_report.html
 ```
 
 Without an OpenAI key the mapper runs rules + a weak fallback, and sends the rest to review. Add `OPENAI_API_KEY` to `.env` to use the LLM stage.
@@ -70,6 +75,8 @@ make onboard     # normal sync again → passes
 2. In the **OAuth 2.0 Playground**, authorize the app **once per company** (accounting scope) and copy each company's **Realm ID** and **Refresh token**.
 3. Fill `.env`: `SOURCE_MODE=live`, `QBO_CLIENT_ID`, `QBO_CLIENT_SECRET`, `QBO_US_REALM_ID`, `QBO_US_REFRESH_TOKEN`, `QBO_UK_REALM_ID`, `QBO_UK_REFRESH_TOKEN`.
 4. `./run_onboarding.sh --fresh`
+
+Sample and live data never mix. Account ids are only unique within one QuickBooks company, so each mode has its own mapping file (`dbt/seeds/coa_mapping_sample.csv` is committed, `coa_mapping_live.csv` stays local), and dbt picks the right one from `SOURCE_MODE`. The warehouse holds one mode at a time: switching modes requires `--fresh`, otherwise the extractor stops with a clear message. To run the other mode without editing `.env`: `SOURCE_MODE=sample ./run_onboarding.sh --fresh`.
 
 **What testing against the live API changed** (sample data was built from Intuit's documented format):
 - Parent accounts with their own postings put those amounts in the report section's *header* row, not in a data row. The parser missed them, and `assert_net_income_ties_to_source` caught it (5 months off by the parent's direct amounts).
@@ -137,6 +144,6 @@ extract/   QuickBooks client (live + sample), parser, loader, CLI
 ai/        COA mapper (rules → LLM → guardrails) and eval
 evals/     gold set + eval results
 dbt/       models (staging, intermediate, marts), seeds, tests
-health/    platform health report
+health/    platform health report + one-page HTML results report
 docs/      PRD, data contract, acceptance criteria, AI-ready interface
 ```

@@ -2,10 +2,13 @@
 # One command from "connect" to "first trusted consolidated P&L", timed.
 # Usage: ./run_onboarding.sh            (mode from .env, default sample)
 #        ./run_onboarding.sh --fresh    (wipe warehouse + state first, to time a brand-new onboarding)
+#        SOURCE_MODE=sample ./run_onboarding.sh --fresh   (override the mode in .env)
 set -uo pipefail
 cd "$(dirname "$0")"
+MODE_OVERRIDE="${SOURCE_MODE:-}"
 [ -f .env ] && set -a && . ./.env && set +a
-MODE="${SOURCE_MODE:-sample}"
+export SOURCE_MODE="${MODE_OVERRIDE:-${SOURCE_MODE:-sample}}"   # dbt reads it to pick the mapping seed
+MODE="$SOURCE_MODE"
 
 if [ "${1:-}" == "--fresh" ]; then
   echo "Fresh onboarding: clearing warehouse and sync state (mappings are kept)"
@@ -24,7 +27,7 @@ PY
 
 rm -f state/.timing_tmp.json
 step "1. Extract + load (QuickBooks -> raw)" python3 -m extract.extract --mode "$MODE" || exit 1
-step "2. Map chart of accounts (rules + AI)" python3 -m ai.coa_mapper || exit 1
+step "2. Map chart of accounts (rules + AI)" python3 -m ai.coa_mapper --mode "$MODE" || exit 1
 step "3. Transform + test (dbt build)" bash -c "cd dbt && dbt build --profiles-dir . --quiet" ; DBT_RC=$?
 python3 - "$MODE" <<'PY'
 import json,sys,pathlib,datetime
@@ -34,4 +37,6 @@ pathlib.Path("state/onboarding_timing.json").write_text(json.dumps({"mode":sys.a
 PY
 echo; echo "=== 4. Platform health ==="
 python3 -m health.health_report
+echo; echo "=== 5. Results report ==="
+python3 -m health.onboarding_report
 exit $DBT_RC
