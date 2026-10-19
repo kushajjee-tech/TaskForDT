@@ -3,7 +3,6 @@ and Acme Ltd (UK, GBP). Account names deliberately differ between the two
 companies, which is the real-world chart-of-accounts mapping problem."""
 import json
 import random
-from datetime import date
 from pathlib import Path
 
 random.seed(7)

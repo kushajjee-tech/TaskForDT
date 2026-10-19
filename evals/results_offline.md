@@ -4,7 +4,7 @@
 |---|---|
 | Accounts in gold set | 60 |
 | Overall accuracy | 47% (28/60) |
-| Auto-approved (confidence >= 0.8) | 30% (18/60) |
+| Auto-approved (confidence >= 0.97) | 30% (18/60) |
 | Accuracy of auto-approved | 100% (18/18) |
 | Sent to human review | 42 |
 
@@ -30,7 +30,7 @@
 | 0.995 | 0/60 | - |
 | 0.999 | 0/60 | - |
 
-Recommended AUTO_APPROVE_CONFIDENCE: **0.5**
+Recommended AUTO_APPROVE_CONFIDENCE: **0.97**
 
 ## Errors
 

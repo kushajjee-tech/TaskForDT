@@ -85,7 +85,9 @@ def main():
     lines += ["", "## Onboarding", ""]
     if TIMING.exists():
         t = json.loads(TIMING.read_text())
-        lines.append(f"- **Time to first trusted P&L:** {t['total_seconds']:.0f} seconds "
+        trusted = RUN_RESULTS.exists() and not failing
+        label = "Time to first trusted P&L" if trusted else "Pipeline run time (not trusted yet: checks failing)"
+        lines.append(f"- **{label}:** {t['total_seconds']:.0f} seconds of machine time "
                      f"(mode: {t['mode']}, {t['finished_at']})")
         for step, secs in t["steps"].items():
             lines.append(f"  - {step}: {secs:.1f}s")

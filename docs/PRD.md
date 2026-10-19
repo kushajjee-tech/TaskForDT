@@ -27,7 +27,7 @@ Cut time from "connect accounting system" to "first trusted consolidated P&L" fr
 |---|---|
 | Time to first trusted P&L (connect → all reconciliation tests green) | < 1 day, incl. human mapping review |
 | Mapping: share auto-approved | ≥ 70% with LLM |
-| Mapping: accuracy of auto-approved | ≥ 95% on gold set |
+| Mapping: accuracy of auto-approved | ≥ 98% on gold set (the threshold is calibrated to this) |
 | Reconciliation to source | 100% of accounts and months within $0.01 |
 | Sync success rate | ≥ 99% of scheduled runs |
 | Data freshness | ≤ 24h behind source |
@@ -39,12 +39,12 @@ Cut time from "connect accounting system" to "first trusted consolidated P&L" fr
 4. Modeled net income equals QuickBooks net income per entity and month within $0.01.
 5. Intercompany revenue and expense net to zero in USD every month; consolidated = sum of entities − eliminations.
 6. Every account with P&L activity maps to exactly one standard category; no mapping flips revenue/expense direction.
-7. Mappings below the confidence threshold appear in a review queue and in the health report.
+7. Mappings below the confidence threshold, and every revenue mapping on first sight, appear in a review queue and in the health report.
 8. Every non-USD line has an FX rate for its month.
 9. The health report shows sync success rate, freshness per stream, test results and accounts awaiting review.
 
 ## Risks and open questions
-- **LLM confidence is self-reported:** mitigated by eval-based thresholds and the direction guardrail.
+- **LLM confidence can be miscalibrated:** self-reported confidence was (all wrong answers scored 0.97-1.00), so confidence now comes from token probabilities, the threshold is calibrated on a gold set, and a deterministic guardrail blocks direction flips. The gold set (60 accounts) is too easy to calibrate precisely; it needs harder, ambiguous accounts.
 - **Report API limits on large companies:** may need date-window chunking for backfills.
 - **Mid-month FX policy and intercompany FX differences:** need a finance-approved policy per customer.
 - **Customer-specific metric definitions** (e.g. ARR, burn): defaults plus per-customer overrides.
