@@ -1,0 +1,61 @@
+account_name,account_type,classification,country,expected_category
+Sales of Product Income,Income,Revenue,United States,Product Revenue
+Services,Income,Revenue,United States,Services Revenue
+Turnover,Income,Revenue,United Kingdom,Product Revenue
+Consultancy Income,Income,Revenue,United Kingdom,Services Revenue
+Design income,Income,Revenue,United States,Services Revenue
+Landscaping Services,Income,Revenue,United States,Services Revenue
+Subscription Revenue,Income,Revenue,United States,Product Revenue
+Implementation Fees,Income,Revenue,United States,Services Revenue
+Cost of Goods Sold,Cost of Goods Sold,Expense,United States,Cost of Revenue
+Cost of Sales,Cost of Goods Sold,Expense,United Kingdom,Cost of Revenue
+Hosting Costs - COGS,Cost of Goods Sold,Expense,United States,Cost of Revenue
+Salaries & Wages,Expense,Expense,United States,Payroll & Benefits
+Payroll Taxes,Expense,Expense,United States,Payroll & Benefits
+Staff Salaries,Expense,Expense,United Kingdom,Payroll & Benefits
+Employer's NI,Expense,Expense,United Kingdom,Payroll & Benefits
+Employee Pension Contributions,Expense,Expense,United Kingdom,Payroll & Benefits
+Health Insurance - Employees,Expense,Expense,United States,Payroll & Benefits
+Bonuses,Expense,Expense,United States,Payroll & Benefits
+Advertising,Expense,Expense,United States,Marketing & Advertising
+Marketing,Expense,Expense,United Kingdom,Marketing & Advertising
+Promotional,Expense,Expense,United States,Marketing & Advertising
+Trade Show Expenses,Expense,Expense,United States,Marketing & Advertising
+Software Subscriptions,Expense,Expense,United States,Software & Tools
+SaaS Tools,Expense,Expense,United Kingdom,Software & Tools
+Computer & Internet,Expense,Expense,United States,Software & Tools
+AWS,Expense,Expense,United States,Software & Tools
+Rent or Lease,Expense,Expense,United States,Rent & Facilities
+Office Rent,Expense,Expense,United Kingdom,Rent & Facilities
+Utilities,Expense,Expense,United States,Rent & Facilities
+Gas and Electric,Expense,Expense,United States,Rent & Facilities
+Building Repairs,Expense,Expense,United States,Rent & Facilities
+Business Rates,Expense,Expense,United Kingdom,Rent & Facilities
+Travel,Expense,Expense,United States,Travel & Meals
+Travel & Subsistence,Expense,Expense,United Kingdom,Travel & Meals
+Meals and Entertainment,Expense,Expense,United States,Travel & Meals
+Travel Meals,Expense,Expense,United States,Travel & Meals
+Legal & Professional Fees,Expense,Expense,United States,Professional Fees
+Accountancy Fees,Expense,Expense,United Kingdom,Professional Fees
+Bookkeeper,Expense,Expense,United States,Professional Fees
+Audit Fees,Expense,Expense,United Kingdom,Professional Fees
+Office Expenses,Expense,Expense,United States,Office & Admin
+Stationery,Expense,Expense,United Kingdom,Office & Admin
+Postage & Delivery,Expense,Expense,United States,Office & Admin
+Dues & Memberships,Expense,Expense,United States,Office & Admin
+Insurance,Expense,Expense,United States,Insurance
+Business Insurance,Expense,Expense,United Kingdom,Insurance
+Workers Compensation,Expense,Expense,United States,Insurance
+Bank Charges,Expense,Expense,United States,Bank & Payment Fees
+Card Processing Fees,Expense,Expense,United Kingdom,Bank & Payment Fees
+Stripe Fees,Expense,Expense,United States,Bank & Payment Fees
+Automobile,Expense,Expense,United States,Vehicle & Equipment
+Fuel,Expense,Expense,United States,Vehicle & Equipment
+Equipment Rental,Expense,Expense,United States,Vehicle & Equipment
+Depreciation,Other Expense,Expense,United States,Depreciation & Amortization
+Amortisation of Software,Other Expense,Expense,United Kingdom,Depreciation & Amortization
+Interest Earned,Other Income,Revenue,United States,Other Income
+Bank Interest Received,Other Income,Revenue,United Kingdom,Other Income
+Interest Expense,Other Expense,Expense,United States,Other Expense
+Foreign Exchange Loss,Other Expense,Expense,United Kingdom,Other Expense
+Corporation Tax,Expense,Expense,United Kingdom,Income Tax
